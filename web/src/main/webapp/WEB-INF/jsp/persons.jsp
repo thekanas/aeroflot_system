@@ -12,13 +12,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Список сотрудников</title>
+    <%@ include file="parts/style.jsp" %>
 </head>
 <body>
-    <%@ include file="header.jsp" %>
+<%@ include file="parts/header.jsp" %>
+<div class="container mt-5">
     <c:forEach var="person" items="${requestScope.persons}">
-        <p>${person.name}, должность   ${person.position}</p>
+        <p>${person.name}, должность ${person.position}</p>
     </c:forEach>
 
-    <%@ include file="footer.jsp" %>
+    <%@ include file="parts/footer.jsp" %>
+</div>
+<%@ include file="parts/script.jsp" %>
 </body>
 </html>

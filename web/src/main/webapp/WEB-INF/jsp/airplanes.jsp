@@ -11,14 +11,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Список самолетов</title>
+    <%@ include file="parts/style.jsp" %>
 </head>
 <body>
-    <%@ include file="header.jsp" %>
+    <%@ include file="parts/header.jsp" %>
+    <div class="container mt-5">
+
+
     <c:forEach var="airplane" items="${requestScope.airplanes}">
         <p>${airplane.make} ${airplane.model}
             с дальностью полета ${airplane.flightRangeKm} км
             и вместимостью пассажиров ${airplane.passengerCapacity}</p>
     </c:forEach>
-    <%@ include file="footer.jsp" %>
+    <%@ include file="parts/footer.jsp" %>
+
+    </div>
+    <%@ include file="parts/script.jsp" %>
 </body>
 </html>
