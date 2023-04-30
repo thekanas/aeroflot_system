@@ -17,11 +17,6 @@ public class AirplaneService {
         return airplaneDao.getAll();
     }
 
-    public Airplane getById(Long id) {
-        return airplaneDao.getById(id)
-                .orElseThrow(RuntimeException::new);
-    }
-
 
     public static AirplaneService getInstance() {
         return INSTANCE;

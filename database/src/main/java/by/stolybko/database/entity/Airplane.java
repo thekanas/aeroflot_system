@@ -8,10 +8,9 @@ import lombok.Data;
 @Builder
 public class Airplane {
     private Long id;
-    private String call;
     private String make;
     private String model;
-    private String passengerCapacity;
-    private String flightRangeKm;
+    private int flightRangeKm;
+    private int passengerCapacity;
 
 }
