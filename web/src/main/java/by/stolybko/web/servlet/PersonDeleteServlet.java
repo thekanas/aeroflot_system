@@ -6,7 +6,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 @WebServlet("/delete")
@@ -27,8 +26,8 @@ public class PersonDeleteServlet extends HttpServlet {
 
     public boolean idIsNumber(HttpServletRequest request) {
         final String id = request.getParameter("id");
-        return id != null &&
-                (id.length() > 0) &&
-                id.matches("[+]?\\d+");
+        return id != null
+                && (id.length() > 0)
+                && id.matches("[+]?\\d+");
     }
 }

@@ -4,9 +4,11 @@ import by.stolybko.database.dao.PersonDao;
 import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.Person;
 import lombok.NoArgsConstructor;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
@@ -14,27 +16,28 @@ public class PersonService {
 
     private static final PersonService INSTANCE = new PersonService();
     private final PersonDao personDao = PersonDao.getInstance();
+
     public static PersonService getInstance() {
         return INSTANCE;
     }
 
-    public List<Person> getAll() {
-        return personDao.getAll();
+    public List<Person> findAll() {
+        return personDao.findAll();
     }
 
-    public Person getById(Long id) {
-        return personDao.getById(id)
+    public Person findById(Long id) {
+        return personDao.findById(id)
                 .orElseThrow(RuntimeException::new);
     }
 
-    public List<Person> getByFilter(PersonFilter filter, Integer page) {
+    public List<Person> findByFilter(PersonFilter filter, Integer page) {
 
-        return personDao.getByFilter(createValidFilter(filter), page);
+        return personDao.findByIdFilter(createValidFilter(filter), page);
     }
 
 
-    public Optional<Person> create(Person person) {
-        return personDao.create(person);
+    public Optional<Person> save(Person person) {
+        return personDao.save(person);
     }
 
     public boolean delete(Long id) {
@@ -54,10 +57,9 @@ public class PersonService {
         PersonFilter validFilter = new PersonFilter();
         validFilter.setFullName(filter.getFullName() == null ? "" : filter.getFullName());
 
-        if(filter.getPosition() == null || filter.getPosition().equalsIgnoreCase("Должность")) {
+        if (filter.getPosition() == null || filter.getPosition().equalsIgnoreCase("Должность")) {
             validFilter.setPosition("");
-        }
-        else {
+        } else {
             validFilter.setPosition(filter.getPosition());
         }
 
@@ -81,7 +83,7 @@ public class PersonService {
     }
 
     public List<String> getAllPosition() {
-        return personDao.getAllPosition();
+        return personDao.findAllPosition();
     }
 
 

@@ -35,7 +35,7 @@ public final class PersonDao {
         return INSTANCE;
     }
 
-    public List<Person> getAll() {
+    public List<Person> findAll() {
         List<Person> persons = new ArrayList<>();
         try (Connection connection = ConnectionPool.get();
              Statement statement = connection.createStatement()) {
@@ -57,7 +57,7 @@ public final class PersonDao {
         return persons;
     }
 
-    public Optional<Person> getById(Long id) {
+    public Optional<Person> findById(Long id) {
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_ID)) {
 
@@ -79,7 +79,7 @@ public final class PersonDao {
         }
     }
 
-    public List<Person> getByFilter(PersonFilter filter, Integer page) {
+    public List<Person> findByIdFilter(PersonFilter filter, Integer page) {
         List<Person> persons = new ArrayList<>();
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY)) {
@@ -109,7 +109,7 @@ public final class PersonDao {
         return persons;
     }
 
-    public Optional<Person> create(Person person) {
+    public Optional<Person> save(Person person) {
         try (Connection connection = ConnectionPool.get();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -182,7 +182,7 @@ public final class PersonDao {
         }
     }
 
-    public List<String> getAllPosition() {
+    public List<String> findAllPosition() {
         List<String> positions = new ArrayList<>();
         try (Connection connection = ConnectionPool.get();
              Statement statement = connection.createStatement()) {

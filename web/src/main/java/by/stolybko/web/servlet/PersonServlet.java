@@ -31,7 +31,7 @@ public class PersonServlet extends HttpServlet {
                 personFilter = new PersonFilter();
             }
 
-            List<Person> persons = personService.getByFilter(personFilter, page);
+            List<Person> persons = personService.findByFilter(personFilter, page);
             System.out.println();
             int countRecords = personService.countAllRecordsByFilter(personFilter);
             int countPages;
@@ -51,7 +51,7 @@ public class PersonServlet extends HttpServlet {
             session.setAttribute("personFilter", personFilter);
             req.getRequestDispatcher(PagesUtil.PERSONS).forward(req, resp);
         } else {
-            req.setAttribute("person", personService.getById(Long.parseLong(id)));
+            req.setAttribute("person", personService.findById(Long.parseLong(id)));
             req.getRequestDispatcher(PagesUtil.PERSON).forward(req, resp);
         }
 

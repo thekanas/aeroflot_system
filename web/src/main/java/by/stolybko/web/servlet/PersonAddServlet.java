@@ -24,7 +24,7 @@ public class PersonAddServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!requestIsValid(req)) {
+        if (!requestIsValid(req)) {
             doGet(req, resp);
         }
 
@@ -35,7 +35,7 @@ public class PersonAddServlet extends HttpServlet {
                 .description(req.getParameter("inputDescription"))
                 .build();
 
-        personService.create(person);
+        personService.save(person);
 
         if (person != null) {
             req.setAttribute("successfullyAdd", true);
@@ -49,8 +49,8 @@ public class PersonAddServlet extends HttpServlet {
         final String position = req.getParameter("inputPosition");
         final String birthDay = req.getParameter("inputBirthDay");
 
-        return fullName != null && fullName.length() > 0 &&
-                position != null && position.length() > 0 &&
-                birthDay != null && birthDay.length() > 0;
+        return fullName != null && fullName.length() > 0
+                && position != null && position.length() > 0
+                && birthDay != null && birthDay.length() > 0;
     }
 }

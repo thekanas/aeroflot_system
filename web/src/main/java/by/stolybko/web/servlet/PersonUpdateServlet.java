@@ -8,6 +8,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,13 +21,13 @@ public class PersonUpdateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-        req.setAttribute("person", personService.getById(Long.parseLong(id)));
+        req.setAttribute("person", personService.findById(Long.parseLong(id)));
         req.getRequestDispatcher(PagesUtil.UPDATE).forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        if(!requestIsValid(req)) {
+        if (!requestIsValid(req)) {
             doGet(req, resp);
         }
 
@@ -52,8 +53,8 @@ public class PersonUpdateServlet extends HttpServlet {
         final String position = req.getParameter("inputPosition");
         final String birthDay = req.getParameter("inputBirthDay");
 
-        return fullName != null && fullName.length() > 0 &&
-                position != null && position.length() > 0 &&
-                birthDay != null && birthDay.length() > 0;
+        return fullName != null && fullName.length() > 0
+                && position != null && position.length() > 0
+                && birthDay != null && birthDay.length() > 0;
     }
 }

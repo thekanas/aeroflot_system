@@ -17,7 +17,7 @@ public class AirplaneDao {
     private static final AirplaneDao INSTANCE = new AirplaneDao();
     private static final String SELECT_ALL = "SELECT * FROM airplane";
 
-    public List<Airplane> getAll() {
+    public List<Airplane> findAll() {
         List<Airplane> airplanes = new ArrayList<>();
         try (Connection connection = ConnectionPool.get();
              Statement statement = connection.createStatement()) {
