@@ -15,6 +15,9 @@ import static lombok.AccessLevel.PRIVATE;
 public class PersonService {
 
     private static final PersonService INSTANCE = new PersonService();
+    private static final String COUNT_RECORDS_PER_PAGE = "3";
+    private static final String BIRTH_DAY_FROM_DEFAULT = "1900-01-01";
+    private static final String BIRTH_DAY_TO_DEFAULT = "2100-01-01";
     private final PersonDao personDao = PersonDao.getInstance();
 
     public static PersonService getInstance() {
@@ -25,9 +28,9 @@ public class PersonService {
         return personDao.findAll();
     }
 
-    public Person findById(Long id) {
+    public Person findById(Long id) throws Exception {
         return personDao.findById(id)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(Exception::new);
     }
 
     public List<Person> findByFilter(PersonFilter filter, Integer page) {
@@ -64,7 +67,7 @@ public class PersonService {
         }
 
         if (filter.getLimit() == null || filter.getLimit().isEmpty() || Integer.parseInt(filter.getLimit()) < 1) {
-            validFilter.setLimit("3");
+            validFilter.setLimit(COUNT_RECORDS_PER_PAGE);
         } else {
             validFilter.setLimit(filter.getLimit());
         }
@@ -75,8 +78,8 @@ public class PersonService {
             validFilter.setBirthDayFrom(filter.getBirthDayFrom());
             validFilter.setBirthDayTO(filter.getBirthDayTO());
         } catch (IllegalArgumentException e) {
-            validFilter.setBirthDayFrom("1900-01-01");
-            validFilter.setBirthDayTO("2100-01-01");
+            validFilter.setBirthDayFrom(BIRTH_DAY_FROM_DEFAULT);
+            validFilter.setBirthDayTO(BIRTH_DAY_TO_DEFAULT);
         }
 
         return validFilter;

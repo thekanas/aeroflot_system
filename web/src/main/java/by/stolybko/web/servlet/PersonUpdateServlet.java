@@ -21,7 +21,11 @@ public class PersonUpdateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String id = req.getParameter("id");
-        req.setAttribute("person", personService.findById(Long.parseLong(id)));
+        try {
+            req.setAttribute("person", personService.findById(Long.parseLong(id)));
+        } catch (Exception e) {
+            req.getRequestDispatcher(PagesUtil.PERSONS).forward(req, resp);
+        }
         req.getRequestDispatcher(PagesUtil.UPDATE).forward(req, resp);
     }
 

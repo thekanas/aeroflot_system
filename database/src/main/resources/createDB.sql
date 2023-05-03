@@ -1,4 +1,4 @@
-DROP DATABASE aeroflot_db;
+DROP DATABASE IF EXISTS aeroflot_db;
 CREATE DATABASE aeroflot_db;
 
 

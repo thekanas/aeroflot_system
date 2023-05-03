@@ -51,7 +51,11 @@ public class PersonServlet extends HttpServlet {
             session.setAttribute("personFilter", personFilter);
             req.getRequestDispatcher(PagesUtil.PERSONS).forward(req, resp);
         } else {
-            req.setAttribute("person", personService.findById(Long.parseLong(id)));
+            try {
+                req.setAttribute("person", personService.findById(Long.parseLong(id)));
+            } catch (Exception e) {
+                req.getRequestDispatcher(PagesUtil.PERSONS).forward(req, resp);
+            }
             req.getRequestDispatcher(PagesUtil.PERSON).forward(req, resp);
         }
 
