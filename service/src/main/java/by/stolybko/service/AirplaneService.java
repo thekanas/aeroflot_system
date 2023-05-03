@@ -13,13 +13,8 @@ public class AirplaneService {
     private static final AirplaneService INSTANCE = new AirplaneService();
     private final AirplaneDao airplaneDao = AirplaneDao.getInstance();
 
-    public List<Airplane> getAll() {
-        return airplaneDao.getAll();
-    }
-
-    public Airplane getById(Long id) {
-        return airplaneDao.getById(id)
-                .orElseThrow(RuntimeException::new);
+    public List<Airplane> findAll() {
+        return airplaneDao.findAll();
     }
 
 
