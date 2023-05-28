@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.url">jdbc:h2:mem:test_mem:demo</property>
+        <property name="connection.driver_class">org.h2.Driver</property>
+        <property name="dialect">org.hibernate.dialect.H2Dialect</property>
+        <property name="connection.username"/>
+        <property name="connection.password"/>
+
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
+
+        <mapping class="by.stolybko.database.entity.PersonEntity"/>
+        <mapping class="by.stolybko.database.entity.AirplaneEntity"/>
+        <mapping class="by.stolybko.database.entity.CreatableEntity"/>
+        <mapping class="by.stolybko.database.entity.Contact"/>
+        <mapping class="by.stolybko.database.entity.AirportEntity"/>
+        <mapping class="by.stolybko.database.entity.FlightEntity"/>
+        <mapping class="by.stolybko.database.entity.MakerEntity"/>
+
+    </session-factory>
+</hibernate-configuration>

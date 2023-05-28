@@ -1,14 +1,27 @@
 DROP DATABASE IF EXISTS aeroflot_db;
 CREATE DATABASE aeroflot_db;
 
+DROP TABLE person;
+DROP TABLE passport;
 
 CREATE TABLE person
 (
     person_id   BIGSERIAL PRIMARY KEY,
-    fullName    VARCHAR(60) NOT NULL,
+    fullName    VARCHAR(60)  NOT NULL,
     position    VARCHAR(60),
     birth_day   DATE,
-    description VARCHAR
+    description VARCHAR,
+    role        VARCHAR(10)  NULL,
+    password    VARCHAR(100) NULL,
+    tel         VARCHAR(50)  NULL,
+    address     VARCHAR      NULL,
+    created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE passport
+(
+    person_id BIGINT REFERENCES person(person_id),
+    number  VARCHAR(20) NOT NULL UNIQUE
 );
 
 
@@ -111,18 +124,61 @@ VALUES ('Калашников Аполлон Романович', 'Кассир'
        ('Бобров Мирослав Львович', 'Математик', '1988-05-29',
         'Медиамикс слабо ускоряет коллективный рекламный клаттер');
 
+DROP TABLE airplane;
+DROP TABLE maker;
+
+CREATE TABLE maker
+(
+    maker_id BIGSERIAL PRIMARY KEY,
+    name     VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE airplane
 (
-    airplane_id   BIGSERIAL PRIMARY KEY,
-    make    VARCHAR(60) NOT NULL,
-    model    VARCHAR(60),
-    flight_range_km   INTEGER,
+    airplane_id        BIGSERIAL PRIMARY KEY,
+    make               BIGINT REFERENCES maker (maker_id),
+    model              VARCHAR(60),
+    flight_range_km    INTEGER,
     passenger_capacity INTEGER
 );
 
+INSERT INTO maker (name)
+VALUES ('Boeing'),
+       ('Cessna'),
+       ('Embraer');
+
 INSERT INTO airplane (make, model, flight_range_km, passenger_capacity)
-VALUES ('Boeing', '737 MAX 8', 6570, 162),
-       ('Boeing', '737-800', 5765, 189),
-       ('Cessna', '510 Citation Mustang', 2161, 5),
-       ('Embraer', 'E-195', 3350, 124);
+VALUES (1, '737 MAX 8', 6570, 162),
+       (1, '737-800', 5765, 189),
+       (2, '510 Citation Mustang', 2161, 5),
+       (3, 'E-195', 3350, 124);
+
+CREATE TABLE airport
+(
+    airport_id BIGSERIAL PRIMARY KEY,
+    name       VARCHAR(50),
+    cod_IATA   VARCHAR(4)
+);
+
+INSERT INTO airport (name, cod_IATA)
+VALUES ('аэропорт "Минск"', 'MSQ'),
+       ('аэропорт "Гомель"', 'GME'),
+       ('аэропорт "Москва-Внуково"', 'VKO');
+
+CREATE TABLE flight
+(
+    flight_id BIGSERIAL PRIMARY KEY,
+    number       VARCHAR(50),
+    airport_departure_id   BIGINT REFERENCES airport(airport_id),
+    airport_arrival_id   BIGINT REFERENCES airport(airport_id),
+    airport_reserve_id   BIGINT REFERENCES airport(airport_id),
+    time_departure timestamp with time zone,
+    time_arrival timestamp with time zone,
+    airplane_id BIGINT REFERENCES airplane(airplane_id)
+);
+
+CREATE TABLE flight_person (
+    id BIGSERIAL PRIMARY KEY,
+    flight_id BIGINT REFERENCES flight(flight_id),
+    person_id BIGINT REFERENCES person(person_id)
+);

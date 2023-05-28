@@ -102,7 +102,7 @@
                 <div class="w-100"></div>
                 <div class="col">
                     <div class="md-form">
-                        <label for="birthDayTO">Даты рождения датой</label>
+                        <label for="birthDayTO">Даты рождения заканчивая датой</label>
                         <input name="birthDayTO" type="date" id="birthDayTO" class="form-control datepicker">
                     </div>
                 </div>

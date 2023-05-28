@@ -19,7 +19,7 @@
 
 
     <c:forEach var="airplane" items="${requestScope.airplanes}">
-        <p>${airplane.make} ${airplane.model}
+        <p>${airplane.make.name} ${airplane.model}
             с дальностью полета ${airplane.flightRangeKm} км
             и вместимостью пассажиров ${airplane.passengerCapacity}</p>
     </c:forEach>

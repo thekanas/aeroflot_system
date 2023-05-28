@@ -1,6 +1,6 @@
 package by.stolybko.web.servlet;
 
-import by.stolybko.database.entity.Person;
+import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.service.PersonService;
 import by.stolybko.web.util.PagesUtil;
 import jakarta.servlet.ServletException;
@@ -35,7 +35,7 @@ public class PersonUpdateServlet extends HttpServlet {
             doGet(req, resp);
         }
 
-        Person person = Person.builder()
+        PersonEntity person = PersonEntity.builder()
                 .id(Long.parseLong(req.getParameter("id")))
                 .fullName(req.getParameter("inputFullName"))
                 .position(req.getParameter("inputPosition"))
