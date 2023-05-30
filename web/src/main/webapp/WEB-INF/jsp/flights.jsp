@@ -34,7 +34,7 @@
                 <td>${flight.airplane.make.name} ${flight.airplane.model}</td>
                 <td>
             <c:forEach var="crew" items="${flight.aircrew}">
-                ${crew.fullName} ${crew.position} <br>
+                ${crew.fullName} ${crew.position}, <br>
             </c:forEach>
 
                 </td>

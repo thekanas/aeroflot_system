@@ -26,10 +26,10 @@ public class AirportEntity implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "cod_IATA")
+    @Column(name = "cod_IATA", nullable = false, length = 4)
     private String codIATA;
 
 }

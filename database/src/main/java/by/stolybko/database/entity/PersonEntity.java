@@ -41,7 +41,7 @@ public class PersonEntity extends CreatableEntity<Long>  {
     @Column(name = "fullname", length = 60, nullable = false)
     private String fullName;
 
-    @Column(name = "position")
+    @Column(name = "position", length = 60)
     private String position;
 
     @Column(name = "birth_day")
@@ -51,10 +51,10 @@ public class PersonEntity extends CreatableEntity<Long>  {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", length = 10)
     private Role role;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 100)
     private String password;
 
     @Embedded

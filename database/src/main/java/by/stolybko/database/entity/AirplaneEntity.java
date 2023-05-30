@@ -29,10 +29,10 @@ public class AirplaneEntity implements BaseEntity<Long> {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "make")
+    @JoinColumn(name = "make", referencedColumnName = "maker_id")
     private MakerEntity make;
 
-    @Column(name = "model")
+    @Column(name = "model", length = 60)
     private String model;
 
     @Column(name = "flight_range_km")

@@ -1,12 +1,12 @@
 package by.stolybko.database;
 
-import by.stolybko.database.entity.Contact;
-import by.stolybko.database.entity.PersonEntity;
+import by.stolybko.database.entity.*;
 import by.stolybko.database.entity.enam.Role;
 import lombok.experimental.UtilityClass;
 import org.hibernate.Session;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @UtilityClass
 public class TestDataImporter {
@@ -46,5 +46,53 @@ public class TestDataImporter {
         session.persist(person2);
         session.persist(person3);
 
+        var airport1 = AirportEntity.builder()
+                .name("аэропорт Гомель")
+                .codIATA("GME")
+                .build();
+
+        var airport2 = AirportEntity.builder()
+                .name("аэропорт Москва")
+                .codIATA("MSK")
+                .build();
+
+        session.persist(airport1);
+        session.persist(airport2);
+
+        var airplane1 = AirplaneEntity.builder()
+                .model("717")
+                .flightRangeKm(1000)
+                .passengerCapacity(150)
+                .build();
+
+        var airplane2 = AirplaneEntity.builder()
+                .model("727")
+                .flightRangeKm(1100)
+                .passengerCapacity(160)
+                .build();
+
+        session.persist(airplane1);
+        session.persist(airplane2);
+
+        var flight1 = FlightEntity.builder()
+                .flightNumber("9928Y")
+                .airportDeparture(airport1)
+                .airportArrival(airport2)
+                .timeDeparture(LocalDateTime.of(2023, 6, 13, 10, 0))
+                .timeArrival(LocalDateTime.of(2023, 6, 13, 13, 0))
+                .airplane(airplane1)
+                .build();
+
+        var flight2 = FlightEntity.builder()
+                .flightNumber("9828Y")
+                .airportDeparture(airport2)
+                .airportArrival(airport1)
+                .timeDeparture(LocalDateTime.of(2023, 6, 18, 10, 0))
+                .timeArrival(LocalDateTime.of(2023, 6, 18, 13, 0))
+                .airplane(airplane2)
+                .build();
+
+        session.persist(flight1);
+        session.persist(flight2);
     }
 }

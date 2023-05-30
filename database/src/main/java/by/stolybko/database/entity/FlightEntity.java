@@ -32,29 +32,29 @@ public class FlightEntity implements BaseEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "number")
+    @Column(name = "number", nullable = false)
     private String flightNumber;
 
     @ManyToOne
-    @JoinColumn(name = "airport_departure_id")
+    @JoinColumn(name = "airport_departure_id", nullable = false, referencedColumnName = "airport_id")
     private AirportEntity airportDeparture;
 
     @ManyToOne
-    @JoinColumn(name = "airport_arrival_id")
+    @JoinColumn(name = "airport_arrival_id", nullable = false, referencedColumnName = "airport_id")
     private AirportEntity airportArrival;
 
     @ManyToOne
-    @JoinColumn(name = "airport_reserve_id")
+    @JoinColumn(name = "airport_reserve_id", referencedColumnName = "airport_id")
     private AirportEntity airportReserve;
 
-    @Column(name = "time_departure")
+    @Column(name = "time_departure", nullable = false)
     private LocalDateTime timeDeparture;
 
-    @Column(name = "time_arrival")
+    @Column(name = "time_arrival", nullable = false)
     private LocalDateTime timeArrival;
 
     @ManyToOne
-    @JoinColumn(name = "airplane_id")
+    @JoinColumn(name = "airplane_id", nullable = false, referencedColumnName = "airplane_id")
     private AirplaneEntity airplane;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

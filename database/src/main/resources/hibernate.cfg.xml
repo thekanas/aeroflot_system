@@ -17,8 +17,6 @@
 
         <mapping class="by.stolybko.database.entity.PersonEntity"/>
         <mapping class="by.stolybko.database.entity.AirplaneEntity"/>
-        <mapping class="by.stolybko.database.entity.CreatableEntity"/>
-        <mapping class="by.stolybko.database.entity.Contact"/>
         <mapping class="by.stolybko.database.entity.AirportEntity"/>
         <mapping class="by.stolybko.database.entity.FlightEntity"/>
         <mapping class="by.stolybko.database.entity.MakerEntity"/>
