@@ -29,8 +29,8 @@ public class AirplaneEntity implements BaseEntity<Long> {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "make", referencedColumnName = "maker_id")
-    private MakerEntity make;
+    @JoinColumn(name = "brand", referencedColumnName = "brand_id")
+    private BrandEntity brand;
 
     @Column(name = "model", length = 60)
     private String model;

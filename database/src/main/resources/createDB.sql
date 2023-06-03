@@ -137,27 +137,28 @@ VALUES (1, '1234Q56'),
        (9, '9234Q56'),
        (10, '10234Q56');
 
-CREATE TABLE maker
+
+CREATE TABLE brand
 (
-    maker_id BIGSERIAL PRIMARY KEY,
+    brand_id BIGSERIAL PRIMARY KEY,
     name     VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE airplane
 (
     airplane_id        BIGSERIAL PRIMARY KEY,
-    make               BIGINT REFERENCES maker (maker_id),
+    brand               BIGINT REFERENCES brand (brand_id),
     model              VARCHAR(60),
     flight_range_km    INTEGER,
     passenger_capacity INTEGER
 );
 
-INSERT INTO maker (name)
+INSERT INTO brand (name)
 VALUES ('Boeing'),
        ('Cessna'),
        ('Embraer');
 
-INSERT INTO airplane (make, model, flight_range_km, passenger_capacity)
+INSERT INTO airplane (brand, model, flight_range_km, passenger_capacity)
 VALUES (1, '737 MAX 8', 6570, 162),
        (1, '737-800', 5765, 189),
        (2, '510 Citation Mustang', 2161, 5),

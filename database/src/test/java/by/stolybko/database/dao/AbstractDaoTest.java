@@ -29,7 +29,7 @@ public class AbstractDaoTest {
 
         session.createNativeQuery("DELETE FROM flight", FlightEntity.class).executeUpdate();
         session.createNativeQuery("DELETE FROM airplane", AirplaneEntity.class).executeUpdate();
-        session.createNativeQuery("DELETE FROM maker", MakerEntity.class).executeUpdate();
+        session.createNativeQuery("DELETE FROM maker", BrandEntity.class).executeUpdate();
         session.createNativeQuery("DELETE FROM passport", PassportEntity.class).executeUpdate();
         session.createNativeQuery("DELETE FROM airport", AirportEntity.class).executeUpdate();
         session.createNativeQuery("DELETE FROM person", PersonEntity.class).executeUpdate();

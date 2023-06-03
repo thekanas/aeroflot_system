@@ -31,7 +31,7 @@
                 <td>${flight.airportArrival.name}</td>
                 <td>${flight.timeDeparture}</td>
                 <td>${flight.timeArrival}</td>
-                <td>${flight.airplane.make.name} ${flight.airplane.model}</td>
+                <td>${flight.airplane.brand.name} ${flight.airplane.model}</td>
                 <td>
             <c:forEach var="crew" items="${flight.aircrew}">
                 ${crew.fullName} ${crew.position}, <br>

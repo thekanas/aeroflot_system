@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @Entity
-@Table(name = "maker")
-public class MakerEntity {
+@Table(name = "brand")
+public class BrandEntity {
 
     @Id
-    @Column(name = "maker_id")
+    @Column(name = "brand_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

@@ -19,7 +19,7 @@
         <mapping class="by.stolybko.database.entity.AirplaneEntity"/>
         <mapping class="by.stolybko.database.entity.AirportEntity"/>
         <mapping class="by.stolybko.database.entity.FlightEntity"/>
-        <mapping class="by.stolybko.database.entity.MakerEntity"/>
+        <mapping class="by.stolybko.database.entity.BrandEntity"/>
         <mapping class="by.stolybko.database.entity.PassportEntity"/>
 
     </session-factory>
