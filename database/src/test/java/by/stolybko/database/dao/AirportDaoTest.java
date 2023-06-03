@@ -11,10 +11,10 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AirportDaoTest {
+public class AirportDaoTest extends AbstractDaoTest {
 
     private static final AirportDao airportDao = AirportDao.getInstance();
-    private static final HibernateFactory sessionFactory = HibernateFactory.getInstance();
+   /* private static final HibernateFactory sessionFactory = HibernateFactory.getInstance();
 
     @BeforeAll
     static void beforeAll() {
@@ -23,12 +23,13 @@ public class AirportDaoTest {
             TestDataImporter.importTestData(session);
             transaction.commit();
         }
-    }
+    }*/
 
     @Test
     @Order(1)
     void whenFindAllInvoked_ThenAllTheAirportAreReturned() {
-        @Cleanup Session session = sessionFactory.getSession();
+        //@Cleanup Session session = sessionFactory.getSession();
+        showContentTable("airport");
         String[] actual = airportDao.findAll(session)
                 .stream()
                 .map(AirportEntity::getCodIATA)
@@ -47,10 +48,11 @@ public class AirportDaoTest {
                 .codIATA("BLG")
                 .build();
 
-        @Cleanup Session session = sessionFactory.getSession();
+        //@Cleanup Session session = sessionFactory.getSession();
         var transaction = session.beginTransaction();
         Optional<AirportEntity> airportEntity = airportDao.save(session, testAirport);
         transaction.commit();
+        //flushAndClearSession();
 
         List<String> allFullName = airportDao.findAll(session).stream()
                 .map(AirportEntity::getName)

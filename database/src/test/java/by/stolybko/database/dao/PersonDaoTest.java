@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PersonDaoTest {
+public class PersonDaoTest extends AbstractDaoTest {
 
     private static final PersonDao personDao = PersonDao.getInstance();
-    private static final HibernateFactory sessionFactory = HibernateFactory.getInstance();
+    /*private static final HibernateFactory sessionFactory = HibernateFactory.getInstance();
 
     @BeforeAll
     static void beforeAll() {
@@ -29,12 +29,14 @@ public class PersonDaoTest {
             TestDataImporter.importTestData(session);
             transaction.commit();
         }
-    }
+    }*/
+
+
 
     @Test
     @Order(1)
     void whenFindAllInvoked_ThenAllThePersonsAreReturned() {
-        @Cleanup Session session = sessionFactory.getSession();
+        //@Cleanup Session session = sessionFactory.getSession();
         String[] actual = personDao.findAll(session)
                 .stream()
                 .map(PersonEntity::getFullName)
@@ -47,8 +49,10 @@ public class PersonDaoTest {
     @Test
     @Order(2)
     void whenFindByIdInvoked_ThenValidThePersonReturned() {
-        @Cleanup Session session = sessionFactory.getSession();
-        Optional<PersonEntity> actual = personDao.findById(session, 1L);
+        //@Cleanup Session session = sessionFactory.getSession();
+        showContentTable("person");
+        Optional<PersonEntity> actual = personDao.findById(session, 10L);
+        System.out.println(session.get(PersonEntity.class, 1L));
         assertTrue(actual.isPresent());
         assertEquals("Авдеев Ананий Максимович", actual.get().getFullName());
     }
@@ -56,7 +60,7 @@ public class PersonDaoTest {
     @Test
     @Order(3)
     void whenFindAllByFilterContainsPositionInvoked_ThenAllTheFilteredByPositionPersonsAreReturned() {
-        @Cleanup Session session = sessionFactory.getSession();
+        //@Cleanup Session session = sessionFactory.getSession();
         PersonFilter filter = PersonFilter.builder()
                 .position("Теолог")
                 .limit("10")
@@ -83,10 +87,11 @@ public class PersonDaoTest {
                 .contact(new Contact("+37512345", "Минск, ул.Советская, д.1"))
                 .build();
 
-        @Cleanup Session session = sessionFactory.getSession();
+        //@Cleanup Session session = sessionFactory.getSession();
         var transaction = session.beginTransaction();
         Optional<PersonEntity> personEntity = personDao.save(session, testPerson);
         transaction.commit();
+        //flushAndClearSession();
 
         List<String> allFullName = personDao.findAll(session).stream()
                 .map(PersonEntity::getFullName)

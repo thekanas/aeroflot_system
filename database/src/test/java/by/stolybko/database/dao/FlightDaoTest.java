@@ -15,28 +15,30 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FlightDaoTest {
+public class FlightDaoTest extends AbstractDaoTest {
 
     private static final FlightDao flightDao = FlightDao.getInstance();
-    private static final HibernateFactory sessionFactory = HibernateFactory.getInstance();
+    /*private static final HibernateFactory sessionFactory = HibernateFactory.getInstance();*/
 
-    @BeforeAll
+    /*@BeforeAll
     static void beforeAll() {
         try (var session = sessionFactory.getSession()) {
             var transaction = session.beginTransaction();
             TestDataImporter.importTestData(session);
             transaction.commit();
         }
-    }
+    }*/
 
     @Test
     @Order(1)
     void whenFindAllInvoked_ThenAllTheFlightAreReturned() {
-        @Cleanup Session session = sessionFactory.getSession();
+        //@Cleanup Session session = sessionFactory.getSession();
         String[] actual = flightDao.findAll(session)
                 .stream()
                 .map(FlightEntity::getFlightNumber)
                 .toArray(String[]::new);
+
+
         String[] expected = List.of("9928Y", "9828Y")
                 .toArray(String[]::new);
         assertArrayEquals(expected, actual);
@@ -46,19 +48,23 @@ public class FlightDaoTest {
     @Test
     @Order(2)
     void whenCreatedInvokedWithFlight_ThenFlightIsSaved() {
-        @Cleanup Session session = sessionFactory.getSession();
+        //@Cleanup Session session = sessionFactory.getSession();
+        showContentTable("airplane");
+        showContentTable("airport");
+        var transaction = session.beginTransaction();
         FlightEntity testFlight = FlightEntity.builder()
                 .flightNumber("2928Y")
-                .airportDeparture(session.get(AirportEntity.class, 1L))
-                .airportArrival(session.get(AirportEntity.class, 2L))
+                .airportDeparture(session.get(AirportEntity.class, 6L))
+                .airportArrival(session.get(AirportEntity.class, 7L))
                 .timeDeparture(LocalDateTime.of(2023, 6, 15, 10, 0))
                 .timeArrival(LocalDateTime.of(2023, 6, 15, 13, 0))
-                .airplane(session.get(AirplaneEntity.class, 1L))
+                .airplane(session.get(AirplaneEntity.class, 6L))
                 .build();
+        //System.out.println(testFlight);
 
-        var transaction = session.beginTransaction();
         Optional<FlightEntity> flightEntity = flightDao.save(session, testFlight);
         transaction.commit();
+        //flushAndClearSession();
 
         List<String> allFullName = flightDao.findAll(session).stream()
                 .map(FlightEntity::getFlightNumber)
