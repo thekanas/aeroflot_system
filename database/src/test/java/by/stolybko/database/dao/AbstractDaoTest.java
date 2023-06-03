@@ -21,29 +21,11 @@ public class AbstractDaoTest {
         var transaction = session.beginTransaction();
         TestDataImporter.importTestData(session);
          transaction.commit();
-        //session.flush();
-        //flushAndClearSession();
-
     }
-
-
 
     @AfterAll
     static void afterAll() {
-        //var session = sessionFactory.getSession();
-        //session.getTransaction().rollback();
-
         var transaction = session.beginTransaction();
-      /* Query query1 = session.createNativeQuery("DELETE FROM airport cascade;" +
-
-
-                "DELETE FROM airport cascade;" +
-                "DELETE FROM flight cascade;" +
-                "DELETE FROM flight_person cascade;" +
-                "DELETE FROM maker cascade;" +
-                "DELETE FROM passport cascade;" +
-                "DELETE FROM person cascade;");
-        query1.executeUpdate();*/
 
         session.createNativeQuery("DELETE FROM flight", FlightEntity.class).executeUpdate();
         session.createNativeQuery("DELETE FROM airplane", AirplaneEntity.class).executeUpdate();
@@ -56,14 +38,7 @@ public class AbstractDaoTest {
         session.close();
     }
 
-
-    protected static void flushAndClearSession() {
-        session.flush();
-        session.clear();
-    }
-
     protected void showContentTable(String tableName) {
-        //Session session = SessionHolder.get();
         Query query1 = session.createNativeQuery("select * from " + tableName);
         List<Object[]> results = query1.getResultList();
         System.out.println("\n======================================");

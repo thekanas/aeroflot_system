@@ -4,7 +4,6 @@ import by.stolybko.database.entity.*;
 import by.stolybko.database.entity.enam.Role;
 import lombok.experimental.UtilityClass;
 import org.hibernate.Session;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

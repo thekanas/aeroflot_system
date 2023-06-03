@@ -1,13 +1,9 @@
 package by.stolybko.database.dao;
 
-import by.stolybko.database.TestDataImporter;
 import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.Contact;
 import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.database.entity.enam.Role;
-import by.stolybko.database.hibernate.HibernateFactory;
-import lombok.Cleanup;
-import org.hibernate.Session;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,23 +16,10 @@ import java.util.Optional;
 public class PersonDaoTest extends AbstractDaoTest {
 
     private static final PersonDao personDao = PersonDao.getInstance();
-    /*private static final HibernateFactory sessionFactory = HibernateFactory.getInstance();
-
-    @BeforeAll
-    static void beforeAll() {
-        try (var session = sessionFactory.getSession()) {
-            var transaction = session.beginTransaction();
-            TestDataImporter.importTestData(session);
-            transaction.commit();
-        }
-    }*/
-
-
 
     @Test
     @Order(1)
     void whenFindAllInvoked_ThenAllThePersonsAreReturned() {
-        //@Cleanup Session session = sessionFactory.getSession();
         String[] actual = personDao.findAll(session)
                 .stream()
                 .map(PersonEntity::getFullName)
@@ -60,7 +43,6 @@ public class PersonDaoTest extends AbstractDaoTest {
     @Test
     @Order(3)
     void whenFindAllByFilterContainsPositionInvoked_ThenAllTheFilteredByPositionPersonsAreReturned() {
-        //@Cleanup Session session = sessionFactory.getSession();
         PersonFilter filter = PersonFilter.builder()
                 .position("Теолог")
                 .limit("10")
@@ -87,11 +69,9 @@ public class PersonDaoTest extends AbstractDaoTest {
                 .contact(new Contact("+37512345", "Минск, ул.Советская, д.1"))
                 .build();
 
-        //@Cleanup Session session = sessionFactory.getSession();
         var transaction = session.beginTransaction();
         Optional<PersonEntity> personEntity = personDao.save(session, testPerson);
         transaction.commit();
-        //flushAndClearSession();
 
         List<String> allFullName = personDao.findAll(session).stream()
                 .map(PersonEntity::getFullName)
