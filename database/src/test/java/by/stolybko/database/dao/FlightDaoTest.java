@@ -37,11 +37,11 @@ public class FlightDaoTest extends AbstractDaoTest {
         var transaction = session.beginTransaction();
         FlightEntity testFlight = FlightEntity.builder()
                 .flightNumber("2928Y")
-                .airportDeparture(session.get(AirportEntity.class, 6L))
-                .airportArrival(session.get(AirportEntity.class, 7L))
+                .airportDeparture(session.get(AirportEntity.class, 1L))
+                .airportArrival(session.get(AirportEntity.class, 2L))
                 .timeDeparture(LocalDateTime.of(2023, 6, 15, 10, 0))
                 .timeArrival(LocalDateTime.of(2023, 6, 15, 13, 0))
-                .airplane(session.get(AirplaneEntity.class, 6L))
+                .airplane(session.get(AirplaneEntity.class, 1L))
                 .build();
 
         Optional<FlightEntity> flightEntity = flightDao.save(session, testFlight);

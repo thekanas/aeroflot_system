@@ -34,8 +34,7 @@ public class PersonDaoTest extends AbstractDaoTest {
     void whenFindByIdInvoked_ThenValidThePersonReturned() {
         //@Cleanup Session session = sessionFactory.getSession();
         showContentTable("person");
-        Optional<PersonEntity> actual = personDao.findById(session, 10L);
-        System.out.println(session.get(PersonEntity.class, 1L));
+        Optional<PersonEntity> actual = personDao.findById(session, 1L);
         assertTrue(actual.isPresent());
         assertEquals("Авдеев Ананий Максимович", actual.get().getFullName());
     }
