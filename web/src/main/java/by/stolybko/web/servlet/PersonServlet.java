@@ -1,7 +1,7 @@
 package by.stolybko.web.servlet;
 
 import by.stolybko.database.dto.PersonFilter;
-import by.stolybko.database.entity.Person;
+import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.service.PersonService;
 import by.stolybko.web.util.PagesUtil;
 import jakarta.servlet.ServletException;
@@ -31,9 +31,9 @@ public class PersonServlet extends HttpServlet {
                 personFilter = new PersonFilter();
             }
 
-            List<Person> persons = personService.findByFilter(personFilter, page);
+            List<PersonEntity> persons = personService.findByFilter(personFilter, page);
             System.out.println();
-            int countRecords = personService.countAllRecordsByFilter(personFilter);
+            long countRecords = personService.countAllRecordsByFilter(personFilter);
             int countPages;
             if (personFilter.getLimit() == null || personFilter.getLimit().isEmpty()) {
                 countPages = (int) Math.ceil(countRecords * 1.0 / (persons.size()));

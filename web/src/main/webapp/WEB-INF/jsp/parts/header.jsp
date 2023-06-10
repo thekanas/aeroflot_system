@@ -18,7 +18,7 @@
                     <a class="nav-link" href="#">Создать рейс</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Текущие рейсы</a>
+                    <a class="nav-link" href="/flights">Текущие рейсы</a>
                 </li>
             </ul>
         </div>

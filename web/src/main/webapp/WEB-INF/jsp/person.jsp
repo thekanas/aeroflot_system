@@ -20,6 +20,7 @@
     <p>${person.fullName}</p>
     <p>Должность: ${person.position}</p>
     <p>Дата рождения: ${person.birthDay}</p>
+    <p>Контакты: ${person.contact.tel}, ${person.contact.address}</p>
     <p> ${person.description}</p>
     <br>
     <hr>

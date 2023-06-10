@@ -1,6 +1,6 @@
 package by.stolybko.web.servlet;
 
-import by.stolybko.database.entity.Person;
+import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.service.PersonService;
 import by.stolybko.web.util.PagesUtil;
 import jakarta.servlet.ServletException;
@@ -28,7 +28,7 @@ public class PersonAddServlet extends HttpServlet {
             doGet(req, resp);
         }
 
-        Person person = Person.builder()
+        PersonEntity person = PersonEntity.builder()
                 .fullName(req.getParameter("inputFullName"))
                 .position(req.getParameter("inputPosition"))
                 .birthDay(LocalDate.parse(req.getParameter("inputBirthDay"), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
