@@ -23,7 +23,6 @@ public class FlightDaoTest extends AbstractDaoTest {
                 .map(FlightEntity::getFlightNumber)
                 .toArray(String[]::new);
 
-
         String[] expected = List.of("9928Y", "9828Y")
                 .toArray(String[]::new);
         assertArrayEquals(expected, actual);

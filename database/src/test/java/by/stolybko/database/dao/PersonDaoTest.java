@@ -32,7 +32,6 @@ public class PersonDaoTest extends AbstractDaoTest {
     @Test
     @Order(2)
     void whenFindByIdInvoked_ThenValidThePersonReturned() {
-        //@Cleanup Session session = sessionFactory.getSession();
         showContentTable("person");
         Optional<PersonEntity> actual = personDao.findById(session, 1L);
         assertTrue(actual.isPresent());
