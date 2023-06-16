@@ -1,62 +1,53 @@
-package by.stolybko.database.dao;
+package by.stolybko.database.repository;
 
 import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.PersonEntity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.hibernate.Session;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class PersonDao extends Dao<Long, PersonEntity> {
+@Repository
+@RequiredArgsConstructor
+public class PersonRepositoryExtensionImpl implements PersonRepositoryExtension {
 
-    private static final PersonDao INSTANCE = new PersonDao();
+    @PersistenceContext
+    private final EntityManager entityManager;
 
-    private PersonDao() {
-        super(PersonEntity.class);
-    }
+    @Override
+    public List<PersonEntity> findByFilter(PersonFilter filter,  Integer page) {
 
-    public static PersonDao getInstance() {
-        return INSTANCE;
-    }
-
-    public List<PersonEntity> findByFilter(Session session, PersonFilter filter, Integer page) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<PersonEntity> critQuery = builder.createQuery(PersonEntity.class);
         Root<PersonEntity> root = critQuery.from(PersonEntity.class);
-
         critQuery.select(root).where(collectPredicates(filter, builder, root).toArray(Predicate[]::new));
 
-        return session.createQuery(critQuery)
+        return entityManager.createQuery(critQuery)
                 .setMaxResults(Integer.parseInt(filter.getLimit()))
                 .setFirstResult(Integer.parseInt(filter.getLimit()) * (page - 1))
-                .list();
+                .getResultList();
     }
 
+    @Override
+    public Long countAllRecordsByFilter(PersonFilter filter) {
 
-    public Long countAllRecordsByFilter(Session session, PersonFilter filter) {
-
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> critQuery = builder.createQuery(Long.class);
         Root<PersonEntity> root = critQuery.from(PersonEntity.class);
         critQuery.select(builder.count(root)).where(collectPredicates(filter, builder, root).toArray(Predicate[]::new));
 
-        return session.createQuery(critQuery).getSingleResult();
-    }
-
-    public List<String> findAllPosition(Session session) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<String> critQuery = builder.createQuery(String.class);
-        Root<PersonEntity> root = critQuery.from(PersonEntity.class);
-
-        critQuery.select(root.get("position")).distinct(true);
-        return session.createQuery(critQuery).getResultList();
+        return entityManager.createQuery(critQuery).getSingleResult();
     }
 
     private static List<Predicate> collectPredicates(PersonFilter filter, CriteriaBuilder builder, Root<PersonEntity> personRoot) {
+
         List<Predicate> predicates = new ArrayList<>();
         if (filter.getFullName() != null) {
             predicates.add(builder.like(personRoot.get("fullName"), "%" + filter.getFullName() + "%"));
@@ -70,5 +61,4 @@ public final class PersonDao extends Dao<Long, PersonEntity> {
 
         return predicates;
     }
-
 }

@@ -1,102 +1,72 @@
 package by.stolybko.service;
 
-import by.stolybko.database.dao.PersonDao;
 import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.PersonEntity;
-import by.stolybko.database.hibernate.HibernateFactory;
-import lombok.NoArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import by.stolybko.database.repository.PersonRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
-import static lombok.AccessLevel.PRIVATE;
 
-@NoArgsConstructor(access = PRIVATE)
+@Service
+@RequiredArgsConstructor
 public class PersonService {
 
-    private static final PersonService INSTANCE = new PersonService();
     private static final String COUNT_RECORDS_PER_PAGE = "3";
-    private final PersonDao personDao = PersonDao.getInstance();
-    private final HibernateFactory hibernateFactory = HibernateFactory.getInstance();
-
-    public static PersonService getInstance() {
-        return INSTANCE;
-    }
+    private final PersonRepository personRepository;
 
     public List<PersonEntity> findAll() {
-        List<PersonEntity> persons;
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            persons = personDao.findAll(session);
-            transaction.commit();
-        }
-        return persons;
+
+        return personRepository.findAll();
     }
 
     public PersonEntity findById(Long id) throws Exception {
-        PersonEntity person;
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            person = personDao.findById(session, id).orElseThrow(Exception::new);
-            System.out.println();
-            transaction.commit();
-        }
-        return person;
+
+        return personRepository.findById(id).orElseThrow(Exception::new);
     }
 
     public List<PersonEntity> findByFilter(PersonFilter filter, Integer page) {
         PersonFilter validFilter = createValidFilter(filter);
-        List<PersonEntity> persons;
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            persons = personDao.findByFilter(session, validFilter, page);
-            transaction.commit();
-        }
-        return persons;
+        return personRepository.findByFilter(validFilter, page);
     }
 
-    public Optional<PersonEntity> save(PersonEntity person) {
-        Optional<PersonEntity> newPerson;
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
+    public PersonEntity save(PersonEntity person) {
 
-            newPerson = personDao.save(session, person);
-            transaction.commit();
-        }
-        return newPerson;
+        return personRepository.save(person);
     }
 
-    public boolean delete(Long id) {
-        boolean success;
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            success = personDao.delete(session, id);
-            transaction.commit();
-        }
-        return success;
+    public void delete(Long id) {
+
+        personRepository.deleteById(id);
     }
 
     public Optional<PersonEntity> update(PersonEntity person) {
-        Optional<PersonEntity> updatePerson;
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            updatePerson = personDao.update(session, person);
-            transaction.commit();
+        Optional<PersonEntity> updatePerson = personRepository.findById(person.getId());
+        if (updatePerson.isPresent()) {
+            updatePerson.get().setFullName(person.getFullName());
+            updatePerson.get().setPosition(person.getPosition());
+            updatePerson.get().setBirthDay(person.getBirthDay());
+            updatePerson.get().setDescription(person.getDescription());
+            personRepository.save(updatePerson.get());
         }
+
         return updatePerson;
     }
 
     public Long countAllRecordsByFilter(PersonFilter filter) {
         Long records;
         PersonFilter validFilter = createValidFilter(filter);
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            records = personDao.countAllRecordsByFilter(session, validFilter);
-            transaction.commit();
-        }
+        records = personRepository.countAllRecordsByFilter(validFilter);
+
         return records;
     }
+
+    public List<String> getAllPosition() {
+
+        return personRepository.findPositions();
+    }
+
 
     private PersonFilter createValidFilter(PersonFilter filter) {
         PersonFilter validFilter = new PersonFilter();
@@ -104,7 +74,7 @@ public class PersonService {
         if (filter.getFullName() != null && filter.getFullName().isEmpty()) {
             validFilter.setFullName(null);
         } else {
-        validFilter.setFullName(filter.getFullName());
+            validFilter.setFullName(filter.getFullName());
         }
 
         if (filter.getPosition() != null && filter.getPosition().equalsIgnoreCase("Должность")) {
@@ -131,15 +101,5 @@ public class PersonService {
         System.out.println();
         return validFilter;
 
-    }
-
-    public List<String> getAllPosition() {
-        List<String> allPosition;
-        try (Session session = hibernateFactory.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            allPosition = personDao.findAllPosition(session);
-            transaction.commit();
-        }
-        return allPosition;
     }
 }
