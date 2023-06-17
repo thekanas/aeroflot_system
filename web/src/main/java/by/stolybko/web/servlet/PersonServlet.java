@@ -1,6 +1,5 @@
 package by.stolybko.web.servlet;
 
-import by.stolybko.config.ServiceConfig;
 import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.service.PersonService;
@@ -14,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import java.io.IOException;
 import java.util.List;
 
@@ -29,9 +27,7 @@ public class PersonServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
-        ApplicationContext ac = new AnnotationConfigApplicationContext(ServiceConfig.class);
-
-        config.getServletContext().setAttribute("applicationContext", ac);
+        ApplicationContext ac = (ApplicationContext) config.getServletContext().getAttribute("applicationContext");
         personService = ac.getBean(PersonService.class);
     }
 

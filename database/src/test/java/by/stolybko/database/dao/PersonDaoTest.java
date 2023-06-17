@@ -50,8 +50,9 @@ public class PersonDaoTest {
     @Test
     @Order(2)
     void whenFindByIdInvoked_ThenValidThePersonReturned() {
-        PersonEntity testPerson = personRepository.findPersonEntitiesByFullName("Шарова Таисия Максимовна");
-        Optional<PersonEntity> actual = personRepository.findById(testPerson.getId());
+        Optional<PersonEntity> testPerson = personRepository.findPersonEntitiesByFullName("Шарова Таисия Максимовна");
+        assertTrue(testPerson.isPresent());
+        Optional<PersonEntity> actual = personRepository.findById(testPerson.get().getId());
         assertTrue(actual.isPresent());
         assertEquals("Шарова Таисия Максимовна", actual.get().getFullName());
     }
