@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@WebServlet("/persons")
+@WebServlet("/persons1")
 @RequiredArgsConstructor
 public class PersonServlet extends HttpServlet {
 

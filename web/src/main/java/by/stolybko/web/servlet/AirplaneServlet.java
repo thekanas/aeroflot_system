@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import java.io.IOException;
 
-@WebServlet("/airplanes")
+@WebServlet("/airplanes1")
 @RequiredArgsConstructor
 public class AirplaneServlet extends HttpServlet {
 
