@@ -1,7 +1,7 @@
 package by.stolybko.web.config;
 
 import by.stolybko.config.ServiceConfig;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import by.stolybko.web.util.PagesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -15,24 +15,13 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring6.view.ThymeleafViewResolver;
 
-import static by.stolybko.web.util.PagesUtil.PREFIX;
-import static by.stolybko.web.util.PagesUtil.SUFFIX;
-
+import static by.stolybko.web.util.PagesUtil.*;
 
 @Configuration
 @Import(ServiceConfig.class)
 @ComponentScan("by.stolybko.web")
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
-    /*@Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.jsp(PREFIX, SUFFIX);
-    }
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
-    }*/
 
     private final ApplicationContext applicationContext;
 
@@ -46,8 +35,8 @@ public class WebConfig implements WebMvcConfigurer {
     public SpringResourceTemplateResolver templateResolver() {
         SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
         templateResolver.setApplicationContext(applicationContext);
-        templateResolver.setPrefix("/WEB-INF/views/");
-        templateResolver.setSuffix(".html");
+        templateResolver.setPrefix(PREFIX);
+        templateResolver.setSuffix(SUFFIX);
         templateResolver.setCharacterEncoding("UTF-8");
         return templateResolver;
     }

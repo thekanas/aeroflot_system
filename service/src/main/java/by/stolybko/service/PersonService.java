@@ -4,17 +4,26 @@ import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.database.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class PersonService {
+public class PersonService implements UserDetailsService {
 
     private static final String COUNT_RECORDS_PER_PAGE = "3";
     private final PersonRepository personRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<PersonEntity> findAll() {
 
@@ -101,5 +110,16 @@ public class PersonService {
         System.out.println();
         return validFilter;
 
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String tel) throws UsernameNotFoundException {
+        return personRepository.findPersonEntitiesByContactTel(tel)
+                .map(personEntity -> User.builder()
+                        .username(personEntity.getContact().getTel())
+                        .password(personEntity.getPassword())
+                        .authorities(personEntity.getRole())
+                        .build())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
