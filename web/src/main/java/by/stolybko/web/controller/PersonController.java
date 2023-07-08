@@ -1,18 +1,16 @@
 package by.stolybko.web.controller;
 
+import by.stolybko.database.dto.PersonDTO;
 import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.service.PersonService;
-import by.stolybko.web.util.PagesUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
-
+import java.util.Optional;
 import static by.stolybko.web.util.PagesUtil.*;
 
 @Controller
@@ -35,9 +33,6 @@ public class PersonController {
     @GetMapping
     public String showPersons(@RequestParam(value = "page", required = false) Integer page, @ModelAttribute("personFilter") PersonFilter personFilter,  Model model) {
 
-       /* if (personFilter == null) {
-            personFilter = new PersonFilter();
-        }*/
         if (page == null) {
             page = 1;
         }
@@ -57,7 +52,6 @@ public class PersonController {
         model.addAttribute("countPages", countPages);
         model.addAttribute("page", page);
         model.addAttribute("positions", positions);
-        //model.addAttribute("personFilter", personFilter);
         System.out.println();
         return "persons";
     }
@@ -80,19 +74,19 @@ public class PersonController {
     }
 
     @GetMapping("/add")
-    public String showAddPerson(@ModelAttribute("person") PersonEntity person) {
+    public String showAddPerson(@ModelAttribute("person") PersonDTO person) {
             return "personAdd";
     }
 
     @PostMapping("/add")
-    public String addPerson(@ModelAttribute("person") PersonEntity person, Model model) {
+    public String addPerson(@ModelAttribute("person") PersonDTO person, Model model) {
         if (!personIsValid(person)) {
             model.addAttribute("errorAdd", true);
             return "personAdd";
         }
 
         PersonEntity personEntity = personService.save(person);
-        if(personEntity != null) {
+        if (personEntity != null) {
             model.addAttribute("successfullyAdd", true);
         }
         return "personAdd";
@@ -103,16 +97,27 @@ public class PersonController {
         personService.delete(id);
         return "redirect:/persons";
     }
+    @GetMapping("/{id}/update")
+    public String showPersonUpdate(@PathVariable("id") Long id, Model model) {
+        try {
+            model.addAttribute("person", personService.findById(id));
+            return "personUpdate";
+        } catch (Exception e) {
+            return "persons";
+        }
+    }
 
-    /*@PostMapping("/{id}/update")
-    public String updatePerson(@PathVariable("id") Long id, Model model) {
-        personService.delete(id);
-        return "redirect:/persons/{id}/update";
-    }*/
+    @PostMapping("/{id}/update")
+    public String updatePerson(@ModelAttribute("person") PersonDTO person, @PathVariable("id") Long id) {
+        Optional<PersonEntity> personEntity = personService.update(person, id);
+        if (personEntity.isEmpty()) {
+            return "redirect:/persons/{id}/update?error";
+        }
 
+        return "redirect:/persons/{id}/update?successfullyUpdate";
+    }
 
-
-    private boolean personIsValid(PersonEntity person) {
+    private boolean personIsValid(PersonDTO person) {
 
         final String fullName = person.getFullName();
         final String position = person.getPosition();
@@ -120,8 +125,6 @@ public class PersonController {
 
         return fullName != null && fullName.length() > 0
                 && position != null && position.length() > 0
-                && birthDay != null ;
+                && birthDay != null;
     }
-
-
 }

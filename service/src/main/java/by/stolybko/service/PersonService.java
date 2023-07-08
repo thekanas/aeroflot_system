@@ -1,17 +1,19 @@
 package by.stolybko.service;
 
+import by.stolybko.database.dto.PersonDTO;
+import by.stolybko.database.dto.PersonDetails;
 import by.stolybko.database.dto.PersonFilter;
+import by.stolybko.database.entity.PassportEntity;
 import by.stolybko.database.entity.PersonEntity;
+import by.stolybko.database.repository.PassportRepository;
 import by.stolybko.database.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,7 @@ public class PersonService implements UserDetailsService {
 
     private static final String COUNT_RECORDS_PER_PAGE = "3";
     private final PersonRepository personRepository;
+    private final PassportRepository passportRepository;
     private final PasswordEncoder passwordEncoder;
 
     public List<PersonEntity> findAll() {
@@ -40,9 +43,26 @@ public class PersonService implements UserDetailsService {
         return personRepository.findByFilter(validFilter, page);
     }
 
-    public PersonEntity save(PersonEntity person) {
+    public PersonEntity save(PersonDTO person) {
 
-        return personRepository.save(person);
+
+        PersonEntity personEntity = PersonEntity.builder()
+                .fullName(person.getFullName())
+                .position(person.getPosition())
+                .birthDay(person.getBirthDay())
+                .description(person.getDescription())
+                .role(person.getRole())
+                .password(passwordEncoder.encode(person.getPassword()))
+                .contact(person.getContact())
+                .build();
+
+        PersonEntity personEntitySaved = personRepository.save(personEntity);
+        PassportEntity passport = new PassportEntity();
+        passport.setNumber(person.getPassportNumber());
+        passport.setPerson(personEntitySaved);
+        passportRepository.save(passport);
+
+        return personEntitySaved;
     }
 
     public void delete(Long id) {
@@ -50,14 +70,28 @@ public class PersonService implements UserDetailsService {
         personRepository.deleteById(id);
     }
 
-    public Optional<PersonEntity> update(PersonEntity person) {
-        Optional<PersonEntity> updatePerson = personRepository.findById(person.getId());
+    public Optional<PersonEntity> update(PersonDTO person, Long id) {
+        Optional<PersonEntity> updatePerson = personRepository.findById(id);
         if (updatePerson.isPresent()) {
             updatePerson.get().setFullName(person.getFullName());
             updatePerson.get().setPosition(person.getPosition());
             updatePerson.get().setBirthDay(person.getBirthDay());
+            updatePerson.get().setRole(person.getRole());
+            updatePerson.get().setContact(person.getContact());
+            if (person.getPassword() != null) {
+
+                updatePerson.get().setPassword(passwordEncoder.encode(person.getPassword()));
+            }
             updatePerson.get().setDescription(person.getDescription());
+
+            Optional<PassportEntity> updatePassport = passportRepository.findById(id);
+            if (person.getPassportNumber() != null && updatePassport.isPresent()) {
+                updatePassport.get().setNumber(person.getPassportNumber());
+                passportRepository.save(updatePassport.get());
+            }
+
             personRepository.save(updatePerson.get());
+
         }
 
         return updatePerson;
@@ -114,12 +148,11 @@ public class PersonService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String tel) throws UsernameNotFoundException {
-        return personRepository.findPersonEntitiesByContactTel(tel)
-                .map(personEntity -> User.builder()
-                        .username(personEntity.getContact().getTel())
-                        .password(personEntity.getPassword())
-                        .authorities(personEntity.getRole())
-                        .build())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        Optional<PersonEntity> person = personRepository.findPersonEntitiesByContactTel(tel);
+
+        if (person.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new PersonDetails(person.get());
     }
 }
