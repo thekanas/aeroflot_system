@@ -3,19 +3,31 @@ package by.stolybko.web.servlet;
 import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.service.PersonService;
 import by.stolybko.web.util.PagesUtil;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 @WebServlet("/add")
+@RequiredArgsConstructor
 public class PersonAddServlet extends HttpServlet {
 
-    private final PersonService personService = PersonService.getInstance();
+    private PersonService personService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        ApplicationContext ac = (ApplicationContext) config.getServletContext().getAttribute("applicationContext");
+        personService = ac.getBean(PersonService.class);
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

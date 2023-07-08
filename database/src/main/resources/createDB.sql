@@ -210,4 +210,4 @@ VALUES (1,1),
        (2,21),
        (3,26);
 
-TRUNCATE TABLE flight_person, passport, person RESTART IDENTITY;
+

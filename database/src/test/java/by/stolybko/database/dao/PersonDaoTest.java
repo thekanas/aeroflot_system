@@ -1,30 +1,48 @@
 package by.stolybko.database.dao;
 
+import by.stolybko.database.config.DatabaseConfig;
 import by.stolybko.database.dto.PersonFilter;
 import by.stolybko.database.entity.Contact;
 import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.database.entity.enam.Role;
+import by.stolybko.database.repository.PersonRepository;
+import net.bytebuddy.implementation.bind.annotation.IgnoreForBinding;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = {DatabaseConfig.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class PersonDaoTest extends AbstractDaoTest {
+@SqlGroup({
+        @Sql(value = "classpath:test-data.sql", executionPhase = BEFORE_TEST_METHOD),
+        @Sql(value = "classpath:purge-data.sql", executionPhase = AFTER_TEST_METHOD)
+})
+public class PersonDaoTest {
 
-    private static final PersonDao personDao = PersonDao.getInstance();
+    @Autowired
+    private PersonRepository personRepository;
 
     @Test
     @Order(1)
     void whenFindAllInvoked_ThenAllThePersonsAreReturned() {
-        String[] actual = personDao.findAll(session)
+        String[] actual = personRepository.findAll()
                 .stream()
                 .map(PersonEntity::getFullName)
                 .toArray(String[]::new);
-        String[] expected = List.of("Авдеев Ананий Максимович", "Федосеев Юрий Владимирович", "Савельева Люся Алексеевна")
+        String[] expected = List.of("Калашников Аполлон Романович", "Шарова Таисия Максимовна", "Кузьмин Ян Романович")
                 .toArray(String[]::new);
         assertArrayEquals(expected, actual);
     }
@@ -32,24 +50,25 @@ public class PersonDaoTest extends AbstractDaoTest {
     @Test
     @Order(2)
     void whenFindByIdInvoked_ThenValidThePersonReturned() {
-        showContentTable("person");
-        Optional<PersonEntity> actual = personDao.findById(session, 1L);
+        Optional<PersonEntity> testPerson = personRepository.findPersonEntitiesByFullName("Шарова Таисия Максимовна");
+        assertTrue(testPerson.isPresent());
+        Optional<PersonEntity> actual = personRepository.findById(testPerson.get().getId());
         assertTrue(actual.isPresent());
-        assertEquals("Авдеев Ананий Максимович", actual.get().getFullName());
+        assertEquals("Шарова Таисия Максимовна", actual.get().getFullName());
     }
 
     @Test
     @Order(3)
     void whenFindAllByFilterContainsPositionInvoked_ThenAllTheFilteredByPositionPersonsAreReturned() {
         PersonFilter filter = PersonFilter.builder()
-                .position("Теолог")
+                .position("Пилот")
                 .limit("10")
                 .build();
-        String[] actual = personDao.findByFilter(session, filter, 1)
+        String[] actual = personRepository.findByFilter(filter, 1)
                 .stream()
                 .map(PersonEntity::getFullName)
                 .toArray(String[]::new);
-        String[] expected = List.of("Авдеев Ананий Максимович", "Федосеев Юрий Владимирович")
+        String[] expected = List.of("Калашников Аполлон Романович", "Кузьмин Ян Романович")
                 .toArray(String[]::new);
         assertArrayEquals(expected, actual);
     }
@@ -67,11 +86,9 @@ public class PersonDaoTest extends AbstractDaoTest {
                 .contact(new Contact("+37512345", "Минск, ул.Советская, д.1"))
                 .build();
 
-        var transaction = session.beginTransaction();
-        Optional<PersonEntity> personEntity = personDao.save(session, testPerson);
-        transaction.commit();
+        PersonEntity personEntity = personRepository.save(testPerson);
 
-        List<String> allFullName = personDao.findAll(session).stream()
+        List<String> allFullName = personRepository.findAll().stream()
                 .map(PersonEntity::getFullName)
                 .toList();
         assertTrue(allFullName.contains(testPerson.getFullName()));
