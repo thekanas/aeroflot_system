@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Самолеты</title>
+    <th:block th:include="header :: header"/></head>
+<body>
+<div th:replace="menu :: menu"></div>
+<div class="container mt-5">
+
+    <!-- ********************************************** -->
+
+    <div class="row">
+        <div class="col-8" style="position:relative; padding-bottom: 50px">
+
+            <div th:each="airlane : ${airplanes}">
+                <p> <span th:text=" ${airlane.brand.name}"/>
+                    <span th:text=" ${airlane.model}"/>
+                    с дальностью полета <span th:text=" ${airlane.flightRangeKm}"/> км
+                    и вместимостью пассажиров <span th:text=" ${airlane.passengerCapacity}"/></p>
+            </div>
+
+
+        </div>
+    </div>
+    <br>
+    <hr>
+    <br>
+    <a href="airplanes/add">Добавить самолёт</a>
+
+
+    <br>
+    <br>
+    <br>
+
+    <th:block th:include="footer :: footer"/>
+</div>
+</body>
+</html>

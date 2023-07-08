@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${person.fullName}"></title>
+    <th:block th:include="header :: header"/></head>
+<body>
+<div th:replace="menu :: menu"></div>
+<div class="container mt-5">
+
+
+
+        <p>ФИО: <span th:text="${person.fullName}"></span></p>
+        <p>Должность: <span th:text="${person.position}"></span></p>
+        <p>Дата рождения: <span th:text="${person.birthDay}"></span></p>
+        <p>Контакты: <span th:text="${person.contact.tel}"></span> , <span th:text="${person.contact.address}"></span></p>
+        <p>Уровень доступа: <span th:text="${person.role}"></span></p>
+        <p>Номер паспорта: <span th:text="${person.passport.number}"></span></p>
+        <p th:text="${person.description}"></p>
+        <br>
+        <hr>
+
+
+
+        <form th:method="POST" th:action="@{/persons/{id}/delete(id=${person.getId()})}">
+            <input type="number" hidden name="id" />
+            <input class="btn btn-primary" type="submit" name="delete" value="Удалить"/>
+        </form>
+        <div class="w-100"></div>
+        <form method="get" th:action="@{/persons/{id}/update(id=${person.getId()})}">
+            <input type="number" hidden name="id" value="${person.id}" />
+            <input class="btn btn-primary" type="submit" value="Редактировать"/>
+        </form>
+
+
+
+
+    <th:block th:include="footer :: footer"/>
+</div>
+</body>
+</html>

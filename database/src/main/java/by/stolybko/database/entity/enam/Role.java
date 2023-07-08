@@ -1,6 +1,13 @@
 package by.stolybko.database.entity.enam;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     ADMIN,
-    EMPLOYEE,
+    EMPLOYEE;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

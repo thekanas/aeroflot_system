@@ -28,7 +28,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(exclude = "flights")
+@ToString(exclude = {"flights", "passport"})
 @Entity
 @Table(name = "person")
 public class PersonEntity extends CreatableEntity<Long>  {

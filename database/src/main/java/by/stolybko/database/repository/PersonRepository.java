@@ -15,6 +15,7 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long>, Per
     List<String> findPositions();
 
     Optional<PersonEntity> findPersonEntitiesByFullName(String fullName);
+    Optional<PersonEntity> findPersonEntitiesByContactTel(String tel);
 
 
 }
