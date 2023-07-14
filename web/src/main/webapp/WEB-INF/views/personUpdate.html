@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th="${person.fullName}">Cотрудник</title>
+    <th:block th:include="header :: header"/></head>
+<body>
+<div th:replace="menu :: menu"></div>
+<div class="container mt-5">
+    <p>ФИО: <span th:text="${person.fullName}"></span></p>
+    <p>Должность: <span th:text="${person.position}"></span></p>
+    <p>Дата рождения: <span th:text="${person.birthDay}"></span></p>
+    <p>Контакты: <span th:text="${person.contact.tel}"></span> , <span th:text="${person.contact.address}"></span></p>
+    <p>Уровень доступа: <span th:text="${person.role}"></span></p>
+    <p>Номер паспорта: <span th:text="${person.passport.number}"></span></p>
+    <p th:text="${person.description}"></p>
+    <br>
+    <hr>
+    <p th:if="${param.successfullyUpdate}" style="color: green">Сотрудник успешно обновлен</p>
+    <p th:if="${param.error}" style="color: red">Сотрудник не обновлен</p>
+
+    <form th:method="POST" class="row g-1" th:action="@{/persons/{id}/update(id=${person.getId()})}" th:object="${person}">
+        <div class="col-3">
+            <label for="inputFullName" class="form-label">ФИО</label>
+            <input type="text" class="form-control" id="inputFullName" name="inputFullName" th:field="*{fullName}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputPosition" class="form-label">Должность</label>
+            <input type="text" class="form-control" id="inputPosition" name="inputPosition" th:field="*{position}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputBirthDay" class="form-label">Дата рождения</label>
+            <input type="date" class="form-control" id="inputBirthDay" name="birthDay" th:value="${person.birthDay}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputTel" class="form-label">Телефон</label>
+            <input type="text" class="form-control" id="inputTel" name="inputTel" th:field="*{contact.tel}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputAdress" class="form-label">Адрес</label>
+            <input type="text" class="form-control" id="inputAdress" name="inputAdress"  th:field="*{contact.address}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputRolle" class="form-label">Уровень доступа</label>
+            <input type="text" class="form-control" id="inputRolle" name="inputRolle"  th:field="*{role}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputPassword" class="form-label">Пароль</label>
+            <input type="text" class="form-control" id="inputPassword" name="password" value="">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputPassport" class="form-label">Номер паспорта</label>
+            <input type="text" class="form-control" id="inputPassport" name="inputPassport"  th:field="*{passport.number}">
+        </div>
+        <div class="w-100"></div>
+        <div class="form-floating col-3">
+            <textarea class="form-control" placeholder="Характеристика" id="floatingTextarea" style="height: 100px" name="inputDescription" th:field="*{description}"></textarea>
+            <label for="floatingTextarea" >Характеристика</label>
+        </div>
+        <div class="w-100"></div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary">Редактировать</button>
+        </div>
+    </form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <th:block th:include="footer :: footer"/>
+</div>
+</body>
+</html>

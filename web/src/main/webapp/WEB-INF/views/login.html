@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Самолеты</title>
+    <th:block th:include="header :: header"/>
+</head>
+<body>
+<div th:replace="menu :: menu"></div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-3">
+
+            <form method="POST" class="row g-1" action="/login">
+
+                <label for="usernameId" class="form-label">Номер телефона:</label><br>
+                <input type="text" id="usernameId" name="username" class="form-control"><br>
+
+                <label for="passwordId" class="form-label">Пароль:</label><br>
+                <input type="password" id="passwordId" name="password" class="form-control"><br>
+
+                <button type="submit" class="btn btn-primary">Войти</button>
+            </form>
+            <div th:if="${param.error}" style="color: red">
+                Неправильные имя или пароль
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+    <th:block th:include="footer :: footer"/>
+</div>
+</body>
+</html>
