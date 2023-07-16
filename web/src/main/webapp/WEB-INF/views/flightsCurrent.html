@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Текущие рейсы</title>
+    <th:block th:include="header :: header"/>
+</head>
+<body>
+<div th:replace="menu :: menu"></div>
+<div class="container mt-5">
+
+    <!-- ********************************************** -->
+
+    <div class="row">
+        <div class="col-12" style="position:relative; padding-bottom: 50px">
+            <h4>Текущие рейсы</h4>
+
+            <table class="table table-striped table-hover">
+
+                <tbody>
+
+                <tr th:each="flight : ${flights}">
+                    <td>
+                        <p><b>Номер рейса:</b> <span th:text=" ${flight.flightNumber}"></span></p>
+                    </td>
+                    <td>
+                        <p><b>Аэропорт вылета:</b> <span th:text=" ${flight.airportDeparture.name}"></span></p>
+                        <p><b>Время и дата вылета:</b> <span th:text=" ${flight.timeDeparture}"></span></p>
+                        <p><b>Погода в аэропорту вылета:</b>
+                            <span th:text=" ${flight.weatherDeparture.temperature.value}"></span>
+                            градусов,<br>
+                            скорость ветра:
+                            <span th:text=" ${flight.weatherDeparture.wind.speed}"></span>м/с<br>
+                            порывы ветра до:
+                            <span th:text=" ${flight.weatherDeparture.wind.gust}"></span>м/с<br>
+                            направление ветра:
+                            <span th:text=" ${flight.weatherDeparture.wind.degrees}"></span>*<br>
+                            облачность
+                            <span th:text=" ${flight.weatherDeparture.clouds.value}"></span>%<br>
+                            <span th:text=" ${flight.weatherDeparture.rain}"></span></p>
+                    </td>
+                    <td>
+                        <p><b>Аэропорт назначения:</b> <span th:text=" ${flight.airportArrival.name}"></span></p>
+                        <p><b>Время и дата прилёта:</b> <span th:text=" ${flight.timeArrival}"></span></p>
+                        <p><b>Погода в аэропорту назначения:</b>
+                            <span th:text=" ${flight.weatherArrival.temperature.value}"></span>
+                            градусов,<br>
+                            скорость ветра:
+                            <span th:text=" ${flight.weatherArrival.wind.speed}"></span>м/с<br>
+                            порывы ветра до:
+                            <span th:text=" ${flight.weatherArrival.wind.gust}"></span>м/с<br>
+                            направление ветра:
+                            <span th:text=" ${flight.weatherArrival.wind.degrees}"></span>*<br>
+                            облачность
+                            <span th:text=" ${flight.weatherArrival.clouds.value}"></span>%<br>
+                            <span th:text=" ${flight.weatherArrival.rain}"></span></p>
+                    </td>
+                    <td>
+                        <p><b>Самолёт:</b><br>
+                            <span th:text=" ${flight.airplane.brand.name}"></span> <span
+                                    th:text=" ${flight.airplane.model}"></span></p>
+                    </td>
+                    <td>
+                        <div>
+                            <p><b>Экипаж:</b><br>
+                                <th:block th:each="crew : ${flight.aircrew}">
+
+                                    <span th:text=" ${crew.fullName}"></span>, <span th:text=" ${crew.position}"></span>;
+                                    <br>
+
+                                </th:block>
+                            </p>
+                        </div>
+
+
+                    </td>
+                    <td sec:authorize="hasAuthority('ADMIN')">
+                        <p><b>Резервный аэропорт:</b> <span th:text=" ${flight.airportReserve.name}"></span>
+                        <br>
+                        <form th:method="GET" th:action="@{/flights/update/{id}/inreserve(id=${flight.getId()})}">
+                            <input type="number" hidden name="id" />
+                            <input class="btn btn-primary" type="submit" name="inreserve" value="Направить в резервный"/>
+                        </form>
+                        <br>
+                        <form th:method="POST" class="row g-1" th:action="@{/flights/update/{id}/timePlus(id=${flight.getId()})}" >
+                            <div class="col-4">
+                                <!--<label for="time" class="form-label"></label>-->
+                                <input type="text" class="form-control" id="time" name="time">
+                            </div>
+                            <div class="col-8">
+                            <button type="submit" class="btn btn-primary">Перенести (+мин)</button>
+                            </div>
+                        </form>
+                        <form th:method="POST" class="row g-1" th:action="@{/flights/update/{id}/timeMinus(id=${flight.getId()})}" >
+                            <div class="col-4">
+                                <!--<label for="time-" class="form-label"></label>-->
+                                <input type="text" class="form-control" id="time-" name="time">
+                            </div>
+                            <div class="col-8">
+                                <button type="submit" class="btn btn-primary">Перенести (-мин)</button>
+                            </div>
+                        </form>
+
+                        <br>
+                        <form th:method="GET" th:action="@{/flights/update/{id}(id=${flight.getId()})}">
+                            <input type="number" hidden name="id" />
+                            <input class="btn btn-primary" type="submit" name="edit" value="Редактировать"/>
+                        </form>
+                        <br>
+                        <form th:method="POST" th:action="@{/flights/{id}/delete(id=${flight.getId()})}">
+                            <input type="number" hidden name="id" />
+                            <input class="btn btn-primary" type="submit" name="delete" value="Отменить"/>
+                        </form>
+
+                        </p>
+                    </td>
+
+
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+    <th:block th:include="footer :: footer"/>
+</div>
+</body>
+</html>

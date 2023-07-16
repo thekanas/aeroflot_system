@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(VIEW_PATH, HOME, LOGIN).permitAll()
-                        .requestMatchers(PERSONS + "/**").hasAuthority("ADMIN")
+                        .requestMatchers(PERSONS + "/**", AIRPLANES + "/add").hasAuthority("ADMIN")
                         .anyRequest().authenticated())
 
                 .formLogin(login -> login

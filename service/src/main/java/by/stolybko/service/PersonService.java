@@ -32,6 +32,14 @@ public class PersonService implements UserDetailsService {
 
         return personRepository.findAll();
     }
+    public List<PersonEntity> findPilots() {
+
+        return personRepository.findByPosition("Пилот");
+    }
+    public List<PersonEntity> findStewards() {
+
+        return personRepository.findByPosition("Бортпроводник");
+    }
 
     public PersonEntity findById(Long id) throws Exception {
 

@@ -32,4 +32,7 @@ public class AirportEntity implements BaseEntity<Long> {
     @Column(name = "cod_IATA", nullable = false, length = 4)
     private String codIATA;
 
+    @Column(name = "city_name", length = 20)
+    private String cityName;
+
 }

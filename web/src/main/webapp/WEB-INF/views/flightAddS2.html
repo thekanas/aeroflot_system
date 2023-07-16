@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создание рейса (шаг 2/2)</title>
+    <th:block th:include="header :: header"/>
+</head>
+<body>
+<div th:replace="menu :: menu"></div>
+<div class="container mt-5">
+
+    <h4>Создание рейса (шаг 2/2)</h4>
+    <div class="row">
+        <div class="col-5">
+            <p>Назначить экипаж на рейс <span th:field="*{flight.flightNumber}"></span>:</p>
+
+
+            <form th:method="POST" class="row g-1" th:action="@{/flights/add/step2/{id}(id=${flight.getId()})}" th:object="${crew}">
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos"  name="captainPilot" th:field="*{captainPilot}">
+                        <option selected th:value="null">Первый пилот (капитан)</option>
+
+                            <option th:each="pilot : ${pilots}" th:value="${pilot.id}" th:text="${pilot.fullName}"></option>
+
+                    </select>
+                </div>
+
+
+                <div class="w-100"></div>
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos" name="secondPilot" th:field="*{secondPilot}">
+                        <option selected th:value="null">Второй пилот</option>
+
+                        <option th:each="pilot : ${pilots}" th:value="${pilot.id}" th:text="${pilot.fullName}"></option>
+
+                    </select>
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos" name="firstSteward" th:field="*{firstSteward}">
+                        <option selected th:value="null">Бортпроводник</option>
+
+                            <option th:each="steward : ${stewards}" th:value="${steward.id}" th:text="${steward.fullName}"></option>
+
+                    </select>
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos" name="secondSteward" th:field="*{secondSteward}">
+                        <option selected th:value="null">Бортпроводник</option>
+
+                        <option th:each="steward : ${stewards}" th:value="${steward.id}" th:text="${steward.fullName}"></option>
+
+                    </select>
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos" name="thirdSteward" th:field="*{thirdSteward}">
+                        <option selected th:value="null">Бортпроводник</option>
+
+                        <option th:each="steward : ${stewards}" th:value="${steward.id}" th:text="${steward.fullName}"></option>
+
+                    </select>
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos" name="fourthSteward" th:field="*{fourthSteward}">
+                        <option selected th:value="null">Бортпроводник</option>
+
+                        <option th:each="steward : ${stewards}" th:value="${steward.id}" th:text="${steward.fullName}"></option>
+
+                    </select>
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos" name="fifthSteward" th:field="*{fifthSteward}">
+                        <option selected th:value="null">Бортпроводник</option>
+
+                        <option th:each="steward : ${stewards}" th:value="${steward.id}" th:text="${steward.fullName}"></option>
+
+                    </select>
+                </div>
+
+                <div class="w-100"></div>
+
+                <div class="col-8">
+                    <select class="form-select" aria-label="pos" name="sixthSteward" th:field="*{sixthSteward}">
+                        <option selected th:value="null">Бортпроводник</option>
+
+                        <option th:each="steward : ${stewards}" th:value="${steward.id}" th:text="${steward.fullName}"></option>
+
+                    </select>
+                </div>
+
+                <div class="w-100"></div>
+                <div class="col-6">
+                    <button type="submit" class="btn btn-primary">Назначить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<th:block th:include="footer :: footer"/>
+</div>
+</body>
+</html>

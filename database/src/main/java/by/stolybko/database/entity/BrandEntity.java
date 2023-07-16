@@ -6,10 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -26,4 +23,8 @@ public class BrandEntity {
 
     @Column(name = "name", nullable = false, length = 50)
     private String name;
+
+    public BrandEntity(String name) {
+        this.name = name;
+    }
 }

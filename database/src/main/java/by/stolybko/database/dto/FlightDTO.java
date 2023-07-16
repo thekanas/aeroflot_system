@@ -11,10 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FlightDTO {
 
+
+
     private String flightNumber;
-    private String airportDeparture;
-    private String airportArrival;
-    private String airportReserve;
+    private String airportDepartureCodIATA;
+    private String airportArrivalCodIATA;
+    private String airportReserveCodIATA;
     private String timeDeparture;
     private String timeArrival;
     private String airplane;

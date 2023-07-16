@@ -29,6 +29,6 @@ public class PassportEntity {
     @JoinColumn(name = "person_id")
     private PersonEntity person;
 
-    @Column(name = "number", length = 20, nullable = false, unique = true)
+    @Column(name = "number", length = 20, unique = true)
     private String number;
 }

@@ -14,6 +14,10 @@ public interface PersonRepository extends JpaRepository<PersonEntity, Long>, Per
     @Query("select distinct p.position from PersonEntity p")
     List<String> findPositions();
 
+
+    List<PersonEntity> findByPosition(String position);
+    Optional<PersonEntity> findById(Long id);
+
     Optional<PersonEntity> findPersonEntitiesByFullName(String fullName);
     Optional<PersonEntity> findPersonEntitiesByContactTel(String tel);
 

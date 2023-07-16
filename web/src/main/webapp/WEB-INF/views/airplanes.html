@@ -1,31 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Самолеты</title>
-    <th:block th:include="header :: header"/></head>
+    <th:block th:include="header :: header"/>
+</head>
 <body>
 <div th:replace="menu :: menu"></div>
 <div class="container mt-5">
 
     <!-- ********************************************** -->
 
-    <div class="row">
-        <div class="col-8" style="position:relative; padding-bottom: 50px">
+    <h4>Список самолетов авиакомпании</h4>
 
-            <div th:each="airlane : ${airplanes}">
-                <p> <span th:text=" ${airlane.brand.name}"/>
-                    <span th:text=" ${airlane.model}"/>
-                    с дальностью полета <span th:text=" ${airlane.flightRangeKm}"/> км
-                    и вместимостью пассажиров <span th:text=" ${airlane.passengerCapacity}"/></p>
-            </div>
+    <p th:if="${param.errorDelete}" style="color: red">Нельзя удалить самолет, на который назначены рейсы</p>
+    <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Марка</th>
+            <th scope="col">Модель</th>
+            <th scope="col">Дальность полета</th>
+            <th scope="col">Вместимость пассажиров</th>
+        </tr>
+        </thead>
+        <tbody>
 
+        <tr th:each="airlane : ${airplanes}">
+            <td>
+                <img th:src="${airlane.img}" class="img-thumbnail" width="300" >
 
-        </div>
-    </div>
+            </td>
+            <td th:text=" ${airlane.brand.name}"></td>
+            <td th:text=" ${airlane.model}"></td>
+            <td><span th:text=" ${airlane.flightRangeKm}"/> км</td>
+            <td><span th:text=" ${airlane.passengerCapacity}"/> человек(а)</td>
+
+            <td sec:authorize="hasAuthority('ADMIN')">
+                <form th:method="GET" th:action="@{/airplanes/{id}(id=${airlane.getId()})}">
+                    <input type="number" hidden name="id" />
+                    <input class="btn btn-primary" type="submit" name="edit" value="Редактировать"/>
+                </form>
+            </td>
+            <td sec:authorize="hasAuthority('ADMIN')">
+                <form th:method="POST" th:action="@{/airplanes/{id}/delete(id=${airlane.getId()})}">
+                    <input type="number" hidden name="id" />
+                    <input class="btn btn-primary" type="submit" name="delete" value="Удалить"/>
+                </form>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
     <br>
     <hr>
     <br>
-    <a href="airplanes/add">Добавить самолёт</a>
+    <a sec:authorize="hasAuthority('ADMIN')" href="airplanes/add">Добавить самолёт</a>
 
 
     <br>

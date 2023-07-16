@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактировать самолет</title>
+    <th:block th:include="header :: header"/></head>
+<body>
+<div th:replace="menu :: menu"></div>
+<div class="container mt-5">
+
+    <h4>Редактировать самолет авиакомпании</h4>
+
+    <p>Марка: <span th:text="${airplane.brand.name}"></span></p>
+    <p>Модель: <span th:text="${airplane.model}"></span></p>
+    <p>Дальность полета: <span th:text="${airplane.flightRangeKm}"></span> км</p>
+    <p>Вместимость пассажиров: <span th:text="${airplane.passengerCapacity}"></span> человек</p>
+
+    <br>
+    <hr>
+
+    <p th:if="${param.successfullyUpdate}" style="color: green">Самолет успешно обновлен</p>
+    <p th:if="${param.error}" style="color: red">Самолет не обновлен</p>
+
+    <form th:method="POST" class="row g-1" th:action="@{/airplanes/{id}/update(id=${airplane.getId()})}" th:object="${airplane}">
+        <div class="col-3">
+            <label for="inputbrand" class="form-label">Марка</label>
+            <input type="text" class="form-control" id="inputbrand" name="brand" th:value="*{brand.name}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputmodel" class="form-label">Модель</label>
+            <input type="text" class="form-control" id="inputmodel" name="model" th:field="*{model}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputflightRangeKm" class="form-label">Дальность полета (км)</label>
+            <input type="text" class="form-control" id="inputflightRangeKm" name="flightRangeKm" th:field="*{flightRangeKm}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputpassengerCapacity" class="form-label">Вместимость пассажиров (человек)</label>
+            <input type="text" class="form-control" id="inputpassengerCapacity" name="passengerCapacity" th:field="*{passengerCapacity}">
+        </div>
+        <div class="w-100"></div>
+        <div class="col-3">
+            <label for="inputimg" class="form-label">Ссылка на фото</label>
+            <input type="text" class="form-control" id="inputimg" name="img" th:field="*{img}">
+        </div>
+
+        <div class="w-100"></div>
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary">Обновить</button>
+        </div>
+    </form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <th:block th:include="footer :: footer"/>
+</div>
+</body>
+</html>
