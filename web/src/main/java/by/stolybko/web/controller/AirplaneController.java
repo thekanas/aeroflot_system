@@ -2,18 +2,14 @@ package by.stolybko.web.controller;
 
 
 import by.stolybko.database.dto.AirplaneDTO;
-import by.stolybko.database.dto.PersonDTO;
 import by.stolybko.database.entity.AirplaneEntity;
-import by.stolybko.database.entity.PersonEntity;
 import by.stolybko.service.AirplaneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.sql.SQLDataException;
 import java.util.Optional;
-
 import static by.stolybko.web.util.PagesUtil.*;
 
 @Controller
@@ -45,8 +41,7 @@ public class AirplaneController {
 
         if (airplaneEntity != null) {
             model.addAttribute("successfullyAdd", true);
-        }
-        else {
+        } else {
             model.addAttribute("errorAdd", true);
         }
         return "airplaneAdd";

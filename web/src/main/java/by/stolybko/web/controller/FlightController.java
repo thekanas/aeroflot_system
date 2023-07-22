@@ -1,6 +1,5 @@
 package by.stolybko.web.controller;
 
-
 import by.stolybko.database.dto.CrewDTO;
 import by.stolybko.database.dto.FlightDTO;
 import by.stolybko.database.dto.FlightShowDTO;
@@ -15,8 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 import java.sql.SQLDataException;
 import java.util.List;
 import static by.stolybko.web.util.PagesUtil.FLIGHTS;
@@ -36,6 +33,7 @@ public class FlightController {
         model.addAttribute("flights", flights);
         return "flights";
     }
+
     @GetMapping("/current")
     public String showCurrentFlights(Model model) {
         List<FlightShowDTO> flights = flightService.findCurrentFlightsWithWeather();
@@ -50,17 +48,19 @@ public class FlightController {
         model.addAttribute("flights", flights);
         return "flightsArchived";
     }
+
     @GetMapping("/assigned")
     public String showAssignedFlights(Model model) {
         List<FlightShowDTO> flights = flightService.findAssigned();
         model.addAttribute("flights", flights);
         return "flightsAssigned";
     }
+
     @GetMapping("/my")
     public String showMyFlights(Authentication authentication, Model model) {
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
 
-        List<FlightEntity> flights = personDetails.getPerson().getFlights();
+        List<FlightEntity> flights = flightService.getFlightsByPerson(personDetails);
         model.addAttribute("flights", flights);
 
         return "flightsMy";
@@ -74,7 +74,7 @@ public class FlightController {
     }
 
     @PostMapping("/add")
-    public String addFlight(@ModelAttribute("flight") FlightDTO flight,  @ModelAttribute("airport") AirportEntity airport, Model model) {
+    public String addFlight(@ModelAttribute("flight") FlightDTO flight, @ModelAttribute("airport") AirportEntity airport, Model model) {
         FlightEntity flightEntity = flightService.save(flight);
 
         if (flightEntity != null) {
@@ -84,6 +84,7 @@ public class FlightController {
         }
         return "flightAddS1";
     }
+
     @GetMapping("/add/step2/{id}")
     public String showAddFlightStep2(@PathVariable("id") Long id, @ModelAttribute("crew") CrewDTO crew, Model model) {
         model.addAttribute("flight", flightService.findById(id));
@@ -91,6 +92,7 @@ public class FlightController {
         model.addAttribute("stewards", personService.findStewards());
         return "flightAddS2";
     }
+
     @PostMapping("/add/step2/{id}")
     public String addFlightStep2(@PathVariable("id") Long id, @ModelAttribute("crew") CrewDTO crew, Model model) {
 
@@ -109,7 +111,7 @@ public class FlightController {
         } else {
             model.addAttribute("errorAdd", true);
         }
-            return "redirect:/flights/add?airportError";
+        return "redirect:/flights/add?airportError";
     }
 
     @GetMapping("/update/{id}")

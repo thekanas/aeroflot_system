@@ -3,6 +3,7 @@ package by.stolybko.service;
 import by.stolybko.database.dto.CrewDTO;
 import by.stolybko.database.dto.FlightDTO;
 import by.stolybko.database.dto.FlightShowDTO;
+import by.stolybko.database.dto.PersonDetails;
 import by.stolybko.database.entity.AirplaneEntity;
 import by.stolybko.database.entity.AirportEntity;
 import by.stolybko.database.entity.FlightEntity;
@@ -15,6 +16,7 @@ import com.github.prominence.openweathermap.api.OpenWeatherMapClient;
 import com.github.prominence.openweathermap.api.enums.Language;
 import com.github.prominence.openweathermap.api.enums.UnitSystem;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ public class FlightService {
     private final PersonRepository personRepository;
     private final AirportRepository airportRepository;
     private final AirplaneRepository airplaneRepository;
+    private final String API_TOKEN = "3fe65063d242535469741ab25860c334";
 
     public FlightEntity findById(Long id) {
 
@@ -65,8 +68,8 @@ public class FlightService {
     public List<FlightShowDTO> findAssigned() {
         List<FlightShowDTO> flights = new ArrayList<>();
 
-        for (FlightEntity flight :
-                flightRepository.findByTimeDepartureIsAfterOrderByTimeDeparture(LocalDateTime.now().plusHours(2).minusSeconds(1))) {
+        for (FlightEntity flight
+                : flightRepository.findByTimeDepartureIsAfterOrderByTimeDeparture(LocalDateTime.now().plusHours(2).minusSeconds(1))) {
 
             flights.add(getFlightShowDTO(flight));
         }
@@ -76,11 +79,10 @@ public class FlightService {
 
     public List<FlightShowDTO> findCurrentFlightsWithWeather() {
         List<FlightShowDTO> flights = new ArrayList<>();
-        String API_TOKEN = "3fe65063d242535469741ab25860c334";
         OpenWeatherMapClient openWeatherClient = new OpenWeatherMapClient(API_TOKEN);
 
-        for (FlightEntity flight :
-                flightRepository.findByTimeDepartureBetweenOrderByTimeDeparture(LocalDateTime.now().minusHours(10), LocalDateTime.now().plusHours(2))) {
+        for (FlightEntity flight
+                : flightRepository.findByTimeDepartureBetweenOrderByTimeDeparture(LocalDateTime.now().minusHours(10), LocalDateTime.now().plusHours(2))) {
 
             FlightShowDTO flightShowDTO = getFlightShowDTO(flight);
 
@@ -145,7 +147,7 @@ public class FlightService {
 
         Optional<FlightEntity> flightEntity = flightRepository.findById(id);
 
-        if(flightEntity.isPresent()) {
+        if (flightEntity.isPresent()) {
 
             flightEntity.get().setFlightNumber(flight.getFlightNumber());
             flightEntity.get().setAirportDeparture(airportRepository.findByCodIATA(flight.getAirportDepartureCodIATA()).get());
@@ -200,7 +202,7 @@ public class FlightService {
     public void delete(Long id) throws SQLDataException {
 
         Optional<FlightEntity> flight = flightRepository.findById(id);
-        if(flight.isPresent()) {
+        if (flight.isPresent()) {
             for (PersonEntity personEntity : flight.get().getAircrew()) {
                 personEntity.getFlights().remove(flight.get());
             }
@@ -235,6 +237,17 @@ public class FlightService {
         flightEntity.ifPresent(entity -> entity.setTimeArrival(entity.getTimeArrival().minusMinutes(time)));
 
         return flightRepository.save(flightEntity.get());
+    }
+
+    public List<FlightEntity> getFlightsByPerson (PersonDetails personDetails) {
+        List<FlightEntity> flightEntities = new ArrayList<>();
+        Optional<PersonEntity> person = personRepository.findById(personDetails.getPerson().getId());
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getFlights());
+            flightEntities = person.get().getFlights();
+
+        }
+        return flightEntities;
     }
 
     private FlightShowDTO getFlightShowDTO(FlightEntity flight) {

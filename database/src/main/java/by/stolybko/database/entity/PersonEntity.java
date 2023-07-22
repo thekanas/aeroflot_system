@@ -50,7 +50,7 @@ public class PersonEntity extends CreatableEntity<Long>  {
     @AttributeOverride(name = "address", column = @Column(name = "address"))
     private Contact contact;
 
-    @ManyToMany(mappedBy = "aircrew", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "aircrew")
     private List<FlightEntity> flights;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)

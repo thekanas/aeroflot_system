@@ -1,13 +1,10 @@
 package by.stolybko.database.dto;
 
-
-import by.stolybko.database.entity.PersonEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -26,28 +23,28 @@ public class CrewDTO {
 
     public List<Long> getAircrewId() {
 
-        if(captainPilot != null) {
+        if (captainPilot != null) {
             aircrewId.add(captainPilot);
         }
-        if(secondPilot != null) {
+        if (secondPilot != null) {
             aircrewId.add(secondPilot);
         }
-        if(firstSteward != null) {
+        if (firstSteward != null) {
             aircrewId.add(firstSteward);
         }
-        if(secondSteward != null) {
+        if (secondSteward != null) {
             aircrewId.add(secondSteward);
         }
-        if(thirdSteward != null) {
+        if (thirdSteward != null) {
             aircrewId.add(thirdSteward);
         }
-        if(fourthSteward != null) {
+        if (fourthSteward != null) {
             aircrewId.add(fourthSteward);
         }
-        if(fifthSteward != null) {
+        if (fifthSteward != null) {
             aircrewId.add(fifthSteward);
         }
-        if(sixthSteward != null) {
+        if (sixthSteward != null) {
             aircrewId.add(sixthSteward);
         }
 
