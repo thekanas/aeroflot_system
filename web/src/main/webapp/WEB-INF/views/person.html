@@ -7,6 +7,7 @@
 <div th:replace="menu :: menu"></div>
 <div class="container mt-5">
 
+    <h4>Информация о сотруднике</h4>
 
 
         <p>ФИО: <span th:text="${person.fullName}"></span></p>
@@ -25,11 +26,16 @@
             <input type="number" hidden name="id" />
             <input class="btn btn-primary" type="submit" name="delete" value="Удалить"/>
         </form>
+    <br>
+
         <div class="w-100"></div>
         <form method="get" th:action="@{/persons/{id}/update(id=${person.getId()})}">
             <input type="number" hidden name="id" value="${person.id}" />
             <input class="btn btn-primary" type="submit" value="Редактировать"/>
         </form>
+    <br>
+    <br>
+    <br>
 
 
 

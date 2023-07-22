@@ -19,10 +19,19 @@
                     <a class="nav-link" href="/airplanes">Самолеты</a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-                    <a class="nav-link" href="#">Создать рейс</a>
+                    <a class="nav-link" href="/flights/add">Создать рейс</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link" href="/flights/assigned">Запланированные рейсы</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/flights">Текущие рейсы</a>
+                    <a class="nav-link" href="/flights/current">Текущие рейсы</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
+                    <a class="nav-link" href="/flights/archived">Архивные рейсы</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasAuthority('EMPLOYEE')">
+                    <a class="nav-link" href="/flights/my">Мои рейсы</a>
                 </li>
             </ul>
 

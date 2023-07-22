@@ -41,4 +41,7 @@ public class AirplaneEntity implements BaseEntity<Long> {
     @Column(name = "passenger_capacity")
     private int passengerCapacity;
 
+    @Column(name = "img")
+    private String img;
+
 }

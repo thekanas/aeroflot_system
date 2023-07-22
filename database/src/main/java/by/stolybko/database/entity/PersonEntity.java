@@ -1,19 +1,7 @@
 package by.stolybko.database.entity;
 
 import by.stolybko.database.entity.enam.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

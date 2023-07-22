@@ -50,7 +50,7 @@ public class PersonRepositoryExtensionImpl implements PersonRepositoryExtension 
 
         List<Predicate> predicates = new ArrayList<>();
         if (filter.getFullName() != null) {
-            predicates.add(builder.like(personRoot.get("fullName"), "%" + filter.getFullName() + "%"));
+            predicates.add(builder.like(builder.upper(personRoot.get("fullName")), "%" + filter.getFullName().toUpperCase() + "%"));
         }
         if (filter.getPosition() != null) {
             predicates.add(builder.like(personRoot.get("position"), "%" + filter.getPosition() + "%"));
